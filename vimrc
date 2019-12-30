@@ -8,8 +8,6 @@
 "       :sp#
 "       :vsp#
 
-"set runtimepath^=/vim
-
 ":highlight ExtraWhitespace ctermbg=red guibg=red
 " The following alternative may be less obtrusive.
 ":highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
@@ -52,7 +50,7 @@ map <C-Y> :call yapf#YAPF()<cr>
 imap <C-Y> <c-o>:call yapf#YAPF()<cr>
 
 " Ctrlp
-set runtimepath^=/vim/bundle/ctrlp.vim
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = ',p'
 let g:ctrlp_by_filename = 1
 let g:ctrlp_switch_buffer = 'Et'
@@ -176,7 +174,7 @@ map <C-a> <Nop>
 
 "bind the spellcheck to F6=ON F7=OFF
 "use a spellfile to add new dicitonary words to
-map <F6> <Esc>:setlocal spell spelllang=en_gb<CR> 
+map <F6> <Esc>:setlocal spell spelllang=en_us<CR> 
 map <F7> <Esc>:setlocal nospell<CR>
 set spellfile=~/.vim/spellfile.add
 
