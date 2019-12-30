@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# config
+VIMRC=/vimrc
+VIMWD=/vimwd
+
+# move to the vim working directory
+cd ${VIMWD}
+
+# start vim with all args passed to docker
+# set the system vimrc
+#vim -u ${VIMRC} $@
+vim $@
+
+# return focus back to the orig tty, for some reason this gets stuck and either
+# needs 'clear' or 'reset'
+clear
