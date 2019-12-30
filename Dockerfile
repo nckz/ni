@@ -20,7 +20,5 @@ COPY vim /root/.vim
 # make a working directory
 RUN mkdir -p /vimwd
 
-#ENV TERM=xterm-256color
-
 # do initial vim setup
 ENTRYPOINT ["/entrypoint"]
