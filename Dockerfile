@@ -1,5 +1,5 @@
 FROM ubuntu:bionic-20191029
-MAINTAINER Nick Zwart
+MAINTAINER Nick Zwart <dr.nicky.z@gmail.com>
 
 # make sure configuration scripts are non-interactive
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
