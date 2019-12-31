@@ -15,3 +15,9 @@ host e.g.:
 
 The target file or directories will be appropriately volume mounted in the
 container by the launch script 'ni'.
+
+To install, issue the following command:
+
+```bash
+    $ curl -s https://raw.githubusercontent.com/nckz/ni/master/ni > /usr/local/bin/ni ; chmod a+x /usr/local/bin/ni
+```
