@@ -21,3 +21,5 @@ To install, issue the following command:
 ```bash
     $ curl -s https://raw.githubusercontent.com/nckz/ni/master/ni > /usr/local/bin/ni ; chmod a+x /usr/local/bin/ni
 ```
+
+![ni](./ni.png)
