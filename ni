@@ -4,6 +4,17 @@
 # Brief: Try to determine a suitable working directory to volume mount before
 #        starting the dockerized vim.
 
+
+####################################################################### INCLUDE
+# TODO: inject these as part of the install
+# make the docker tags for this project
+DOCKER_ACC='3x3t3r'
+DOCKER_REP='ni'
+DOCKER_TAG='latest'
+DOCKER_REF="${DOCKER_ACC}/${DOCKER_REP}"
+
+
+########################################################################## MAIN
 # assume the user will only give one arg and that it will be a file or
 # directory path.
 ARG=$1
@@ -45,7 +56,7 @@ fi
 # if no args are given then mount the current directory
 echo "MOUNT: ${MNT}"
 echo "FILE: ${FNAME}"
-docker run -it --rm -v ${MNT}:/vimwd 'vim' "${FNAME}"
+docker run -it --rm -v ${MNT}:/vimwd "${DOCKER_REF}" "${FNAME}"
 
 # for some reason the terminal gets trashed when vim exists so it needs 'clear'
 # or 'reset'
