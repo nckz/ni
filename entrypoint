@@ -9,7 +9,3 @@ cd ${VIMWD}
 # start vim with all args passed to docker
 # set the system vimrc
 vim $@
-
-# return focus back to the orig tty, for some reason this gets stuck and either
-# needs 'clear' or 'reset'
-clear

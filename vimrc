@@ -8,6 +8,10 @@
 "       :sp#
 "       :vsp#
 
+" vim/colors/solarized.vim
+" avoid undercurl error by either setting to underline or:
+set t_Cs=
+
 ":highlight ExtraWhitespace ctermbg=red guibg=red
 " The following alternative may be less obtrusive.
 ":highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
