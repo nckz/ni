@@ -43,6 +43,8 @@ endif
 ":match ExtraWhitespace /^\t*\zs \+/
 " Switch off :match highlighting.
 ":match
+" search for trailing whitespace when insert mode ends
+:au InsertLeave * match ExtraWhitespace /\s\+$/
 
 syntax enable
 set background=dark
