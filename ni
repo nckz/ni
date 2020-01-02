@@ -4,6 +4,7 @@
 # Brief: Try to determine a suitable working directory to volume mount before
 #        starting the dockerized vim.
 
+set -eo pipefail
 
 ####################################################################### INCLUDE
 # TODO: inject these as part of the install
@@ -14,17 +15,40 @@ DOCKER_TAG='latest'
 DOCKER_REF="${DOCKER_ACC}/${DOCKER_REP}"
 
 
+##################################################################### FUNCTIONS
+# an os agnostic way of getting a full path
+function fullpath {
+    python3 -c "import os; print(os.path.realpath(os.path.expanduser('${1}')))"
+}
+
+# see if the mount point is under git version control
+function gitsearch () {
+    CUR=$1
+    GITDIR='.git'
+    LAST=
+    # don't try the same directory twice
+    while [ "${CUR}" != "${LAST}" ]; do
+        if [ -d "${CUR}/${GITDIR}" ]; then
+            echo "${CUR}"
+            return
+        fi
+        LAST=${CUR}
+        CUR=$(dirname ${CUR})
+    done
+}
+
+# escape chars within a string for subsequent use in sed
+function escape () {
+    echo $(echo ${1} | sed 's/[\/&]/\\&/g')
+}
+
+
 ########################################################################## MAIN
 # assume the user will only give one arg and that it will be a file or
 # directory path.
 ARG=$1
 MNT=$('pwd')  # by default use the current working dir
 FNAME=  # by default there is no filename
-
-# an os agnostic way of getting a full path
-function fullpath {
-    python3 -c "import os; print(os.path.realpath(os.path.expanduser('${1}')))"
-}
 
 # get a full path for determining mount points and correctly handling links
 ARG=$(fullpath ${ARG})
@@ -50,6 +74,17 @@ elif [ -d "$(dirname ${ARG})" ]; then
     # split the filename and dir into basename and mount point
     MNT=$(dirname ${ARG})
     FNAME=$(basename ${ARG})
+
+fi
+
+# mount at the git dir to allow for git ops
+if [ -n "$(gitsearch ${MNT})" ]; then
+
+    PARENT=$(gitsearch ${MNT})
+    echo ".git was found in '${PARENT}', setting as mount point."
+    FNAME="$(echo ${MNT} | sed "s/$(escape ${PARENT})//g")/${FNAME}"
+    FNAME="$(echo ${FNAME} | sed 's/^\///g')"  # remove leading slash
+    MNT=${PARENT}
 
 fi
 
