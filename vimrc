@@ -12,6 +12,20 @@
 " avoid undercurl error by either setting to underline or:
 set t_Cs=
 
+" http://vim.1045645.n5.nabble.com/Corrupt-display-when-editing-remotely-via-ssh-td5730732.html
+" Work-around for garbage/corrupt edit display back to
+" macOS XQuartz (X11) server with newer vi/vim
+" It requires that you set it to an invalid term 'dummy' and then to a valid
+" one.
+if (&term == 'xterm')
+  set term=dummy
+  set term=xterm
+endif
+if (&term == 'xterm-256color')
+  set term=dummy
+  set term=xterm-256color
+endif
+
 ":highlight ExtraWhitespace ctermbg=red guibg=red
 " The following alternative may be less obtrusive.
 ":highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
