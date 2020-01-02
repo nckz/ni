@@ -5,11 +5,14 @@ MAINTAINER Nick Zwart <dr.nicky.z@gmail.com>
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # install vim and any other desired packages
+# - exuberant-ctags: easytags
+# - git: git-grep searches
 RUN apt-get update && apt-get install -y \
     --allow-downgrades \
     --no-install-recommends \
     vim \
-    exuberant-ctags
+    exuberant-ctags \
+    git
 
 # copy the entrypoint script
 COPY entrypoint /
