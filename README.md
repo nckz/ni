@@ -16,6 +16,12 @@ $ ni my_new_file
 The target file or directories will be appropriately volume mounted in the
 container by the launch script 'ni'.
 
+## Git Aware
+ni is git-aware so when it starts it will check to see if the target path is
+under a git repository and then set the docker mount.  This allows for git
+based vim functions such as git-grep.
+
+# Installation
 To install, issue the following command:
 
 ```bash
