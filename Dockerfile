@@ -21,6 +21,9 @@ COPY entrypoint /
 COPY vimrc /root/.vimrc
 COPY vim /root/.vim
 
+# for performing git commands from vim
+COPY gitconfig /root/.gitconfig
+
 # make a working directory
 RUN mkdir -p /vimwd
 

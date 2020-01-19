@@ -1,0 +1,26 @@
+[user]
+	name = nckz
+	email = dr.nicky.z@gmail.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[alias]
+    co = checkout
+    br = branch
+    bra = branch -a
+    lg = log -p
+    lgg = log --graph --all --decorate
+    lggf = log --graph --all --decorate --stat
+    lf = log --stat
+    who = shortlog -s --
+    cia = commit -a
+    ci = commit
+    st = status
+    pu = push -u origin master
+    re = remote
+    unstage = reset HEAD --
+    rollback = reset --soft HEAD^
+    rmuntracked = clean -d -f
+    showuntracked = ls-files --others --exclude-standard
+    patch = whatchanged -m -n 1 -p
