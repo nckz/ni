@@ -1,7 +1,7 @@
 FROM alpine:3.11
 MAINTAINER Nick Zwart <dr.nicky.z@gmail.com>
 
-RUN apk --update add \
+RUN apk --update add --no-cache \
     bash \
     vim \
     git
