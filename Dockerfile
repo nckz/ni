@@ -4,7 +4,6 @@ MAINTAINER Nick Zwart <dr.nicky.z@gmail.com>
 RUN apk --update add \
     bash \
     vim \
-    ctags \
     git
 
 # copy the entrypoint script
