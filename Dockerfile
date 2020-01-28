@@ -1,17 +1,10 @@
-FROM ubuntu:bionic-20191029
+FROM alpine:3.11
 MAINTAINER Nick Zwart <dr.nicky.z@gmail.com>
 
-# make sure configuration scripts are non-interactive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
-# install vim and any other desired packages
-# - exuberant-ctags: easytags
-# - git: git-grep searches
-RUN apt-get update && apt-get install -y \
-    --allow-downgrades \
-    --no-install-recommends \
+RUN apk --update add \
+    bash \
     vim \
-    exuberant-ctags \
+    ctags \
     git
 
 # copy the entrypoint script
