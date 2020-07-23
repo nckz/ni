@@ -10,4 +10,4 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/config.bash ; config
 
 
 ########################################################################## MAIN
-docker build --rm -t ${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG} .
+docker build --rm -t "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}" .
