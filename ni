@@ -75,6 +75,13 @@ elif [ -d "$(dirname ${ARG})" ]; then
     MNT=$(dirname ${ARG})
     FNAME=$(basename ${ARG})
 
+    # since user-mapping happens on some systems and not others; we can just
+    # touch the file that is about to be created while in the user's
+    # environment before going to the container
+    NEW_FILE=${MNT}/${FNAME}
+    echo "Making new file ${NEW_FILE}"
+    touch "${NEW_FILE}"
+
 fi
 
 # mount at the git dir to allow for git ops
@@ -93,7 +100,7 @@ echo "MOUNT: ${MNT}"
 echo "FILE: ${FNAME}"
 
 # change detach keys from ctrl-p to something less obtrusive to vim
-docker run -it --rm --detach-keys="ctrl-@" -v ${MNT}:/vimwd --user $(id -u):$(id -g) "${DOCKER_REF}" "${FNAME}"
+docker run -it --rm --detach-keys="ctrl-@" -v ${MNT}:/vimwd "${DOCKER_REF}" "${FNAME}"
 
 # for some reason the terminal gets trashed when vim exists so it needs 'clear'
 # or 'reset'

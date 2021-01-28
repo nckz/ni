@@ -14,15 +14,22 @@ RUN mkdir -p ~/.vim/pack/git-plugins/start && \
 # copy the entrypoint script
 COPY entrypoint /
 
+# make a container user and home dir
+ARG CONF_DIR=/vimconf
+RUN adduser -D --home $CONF_DIR knight
+
 # copy the vim config
-COPY vimrc /root/.vimrc
-COPY vim /root/.vim
+COPY vim $CONF_DIR/.vim
+COPY vimrc $CONF_DIR/.vimrc
 
 # for performing git commands from vim
-COPY gitconfig /root/.gitconfig
+COPY gitconfig /etc/gitconfig
 
 # make a working directory
 RUN mkdir -p /vimwd
+
+# change container user
+USER knight
 
 # do initial vim setup
 ENTRYPOINT ["/entrypoint"]
