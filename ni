@@ -93,7 +93,7 @@ echo "MOUNT: ${MNT}"
 echo "FILE: ${FNAME}"
 
 # change detach keys from ctrl-p to something less obtrusive to vim
-docker run -it --rm --detach-keys="ctrl-@" -v ${MNT}:/vimwd "${DOCKER_REF}" "${FNAME}"
+docker run -it --rm --detach-keys="ctrl-@" -v ${MNT}:/vimwd --user $(id -u):$(id -g) "${DOCKER_REF}" "${FNAME}"
 
 # for some reason the terminal gets trashed when vim exists so it needs 'clear'
 # or 'reset'
