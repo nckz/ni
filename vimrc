@@ -65,17 +65,18 @@ colorscheme solarized
 " always set to current open file dir
 set autochdir
 
-" YAPF
-map <C-Y> :call yapf#YAPF()<cr>
-imap <C-Y> <c-o>:call yapf#YAPF()<cr>
+" the leader
+let mapleader = ","
 
 " Ctrlp
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = ',p'
 let g:ctrlp_by_filename = 1
 let g:ctrlp_switch_buffer = 'Et'
+map <leader>cc :CtrlPClearCache<CR>
 
 " Ale
+map <leader>at :ALEToggle<CR>
 let g:ale_linters = {'python': ['flake8']}
 let g:ale_fixers = {'*': ['remove_trailing_lines'], 'python': ['black']}
 let g:ale_python_flake8_options = '--ignore E203,E501'
@@ -127,10 +128,10 @@ vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 " To go to the previous search results do:
 "   <leader>p
 "
-map <leader>cc :botright cope<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-map <leader>n :cn<cr>
-map <leader>p :cp<cr>
+" map <leader>cc :botright cope<cr>
+" map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+" map <leader>n :cn<cr>
+" map <leader>p :cp<cr>
 
 
 
