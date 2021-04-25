@@ -79,7 +79,7 @@ map <leader>cc :CtrlPClearCache<CR>
 map <leader>at :ALEToggle<CR>
 let g:ale_linters = {'python': ['flake8']}
 let g:ale_fixers = {'*': ['remove_trailing_lines'], 'python': ['black']}
-let g:ale_python_flake8_options = '--ignore E203,E501'
+let g:ale_python_flake8_options = '--ignore E203,E501,W503'
 let g:ale_fix_on_save = 1
 
 
