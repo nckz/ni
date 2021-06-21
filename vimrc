@@ -282,8 +282,5 @@ let generate_tags=1
 :set nowritebackup
 :endif
 
-" git flavored markdown
-augroup markdown
-    au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
-augroup END
+" native markdown for other extensions
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
