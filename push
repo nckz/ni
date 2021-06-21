@@ -3,8 +3,8 @@
 # Date: 2019dec31
 # Brief: push the docker image to dockerhub
 
-ACC=$1
-PSWD=$2
+# ACC=$1
+# PSWD=$2
 
 
 ####################################################################### INCLUDE
@@ -13,5 +13,5 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/config.bash ; config
 
 
 ########################################################################## MAIN
-docker login --username ${ACC} --password ${PSWD}
+# docker login --username ${ACC} --password ${PSWD}
 docker push ${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}
