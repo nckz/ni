@@ -1,0 +1,25 @@
+#!/bin/bash
+# Author: Nick Zwart
+# Date: 2022jan25
+# Brief: a script that can copy the vim and vimrc directories to HOME and
+#        modify the background to either dark or light.
+#        Also append an alias for ni -> vim.
+
+######################################################################## STRICT
+# strict mode settings
+set -euo pipefail
+IFS=$'\n\t'
+
+HOME=/tmp/home
+mkdir -p $HOME
+
+########################################################################### CLI
+BKGND_COLOR=${1:-dark}
+
+
+########################################################################## MAIN
+# copy the cursed vim config
+cp -rv vim "$HOME/.vim"
+
+# modify based on first arg
+sed "s/^set\ background.*/set\ background=${BKGND_COLOR}/g" < vimrc > "$HOME/.vimrc"
