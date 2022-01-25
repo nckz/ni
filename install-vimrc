@@ -5,6 +5,7 @@
 #        modify the background to either dark or light.
 #        Also append an alias for ni -> vim.
 #        Also add my gitconfig.
+#        Also install Ale
 
 ######################################################################## STRICT
 # strict mode settings
@@ -23,6 +24,10 @@ cp -v gitconfig "$HOME/.gitconfig"
 
 # modify based on first arg
 sed "s/^set\ background.*/set\ background=${BKGND_COLOR}/g" < vimrc > "$HOME/.vimrc"
+
+# install ale
+mkdir -p "$HOME/.vim/pack/git-plugins/start"
+git clone --depth 1 https://github.com/dense-analysis/ale.git "$HOME/.vim/pack/git-plugins/start/ale"
 
 # make a ni executable link to vim
 ln -s "$(command -v vim)" /usr/bin/ni
