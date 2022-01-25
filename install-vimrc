@@ -23,3 +23,6 @@ cp -v gitconfig "$HOME/.gitconfig"
 
 # modify based on first arg
 sed "s/^set\ background.*/set\ background=${BKGND_COLOR}/g" < vimrc > "$HOME/.vimrc"
+
+# make a ni executable link to vim
+ln -s "$(command -v vim)" /usr/bin/ni
