@@ -6,6 +6,12 @@
 
 set -eo pipefail
 
+
+########################################################################### CLI
+# root user override with env var
+AS_ROOT=${AS_ROOT:-}
+
+
 ####################################################################### INCLUDE
 # TODO: inject these as part of the install
 # make the docker tags for this project
@@ -13,6 +19,12 @@ DOCKER_ACC='3x3t3r'
 DOCKER_REP='ni'
 DOCKER_TAG='latest'
 DOCKER_REF="${DOCKER_ACC}/${DOCKER_REP}"
+
+
+########################################################################## VARS
+# run as the current user
+AS_USER="--user $(id -u):$(id -g)"
+[ -n "${AS_ROOT}" ] && AS_USER="--user 0:0"
 
 
 ##################################################################### FUNCTIONS
@@ -100,7 +112,7 @@ echo "MOUNT: ${MNT}"
 echo "FILE: ${FNAME}"
 
 # change detach keys from ctrl-p to something less obtrusive to vim
-docker run -it --rm --detach-keys="ctrl-@" -v ${MNT}:/vimwd "${DOCKER_REF}" "${FNAME}"
+docker run -it --rm --detach-keys="ctrl-@" ${AS_USER} -v ${MNT}:/vimwd "${DOCKER_REF}" "${FNAME}"
 
 # for some reason the terminal gets trashed when vim exists so it needs 'clear'
 # or 'reset'
