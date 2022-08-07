@@ -26,22 +26,24 @@ COPY gitconfig /etc/gitconfig
 # make a working directory
 RUN mkdir -p /vimwd
 
+# copy the configs to a destination accessible by any user
 # the user's home dir
-ARG CONF_DIR=/vimconf
+ARG CONF_DIR=/
+COPY vim $CONF_DIR/.vim
+COPY vimrc $CONF_DIR/.vimrc
 
-# make a container user and home dir
-RUN adduser -D --home $CONF_DIR knight
+# link to root in case ni is started as sudo/root
+RUN cd /root && ln -s /.vim
+RUN cd /root && ln -s /.vimrc
 
-# change container user
-USER knight
-
-# copy the vim config
-COPY --chown=knight:knight vim $CONF_DIR/.vim
-COPY --chown=knight:knight vimrc $CONF_DIR/.vimrc
-
-# install https://github.com/dense-analysis/ale
+# Install Ale
+# https://github.com/dense-analysis/ale
 RUN mkdir -p $CONF_DIR/.vim/pack/git-plugins/start
 RUN git clone --depth 1 https://github.com/dense-analysis/ale.git $CONF_DIR/.vim/pack/git-plugins/start/ale
 
-# do initial vim setup
+# Allow any user to write to plugins
+RUN chmod 777 -R $CONF_DIR/.vim
+RUN chmod +r -R $CONF_DIR/.vimrc
+
+# Pass all args to vim via the entrypoint
 ENTRYPOINT ["/entrypoint"]

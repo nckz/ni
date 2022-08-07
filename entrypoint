@@ -1,11 +1,26 @@
 #!/bin/bash
 
+# From vim term `:h rtp`
+# Unix:  "$HOME/.vim,
+# $VIM/vimfiles,
+# $VIMRUNTIME,
+# $VIM/vimfiles/after,
+# $HOME/.vim/after"
+#
+# its important to recognize that if no users are made, vim looks in the root
+# directory for .vimrc and .vim
+# HOME = /
+
 # volume mounted working directory
 VIMWD=/vimwd
+CONF_DIR=/
 
 # move to the vim working directory
 cd ${VIMWD}
 
 # start vim with all args passed to docker
 # set the system vimrc
+# -N and -u args are used b/c the 'user' might be an unpriviledged user (with
+# home '/') or sudo/root (with home '/root').
+# vim -N -u ${CONF_DIR}/.vimrc $@
 vim $@
