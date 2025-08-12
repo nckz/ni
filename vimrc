@@ -284,3 +284,7 @@ let generate_tags=1
 
 " native markdown for other extensions
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" ensure Python files are always recognized as UTF-8
+au BufNewFile,BufFilePre,BufRead *.py set fileencoding=utf-8
+au BufNewFile,BufFilePre,BufRead *.py setlocal fileencoding=utf-8
