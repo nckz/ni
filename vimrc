@@ -83,13 +83,14 @@ let g:ale_python_flake8_options = '--ignore E203,E501,W503'
 let g:ale_fix_on_save = 1
 
 " Reduce ALE message verbosity to avoid hash_add() errors
-let g:ale_echo_msg_format = '[%linter%] %s'
-let g:ale_cursor_detail = 0
-let g:ale_virtualtext_cursor = 0
+" let g:ale_echo_msg_format = '[%linter%] %s'
+" let g:ale_echo_cursor = 1
+" let g:ale_cursor_detail = 1
+" let g:ale_virtualtext_cursor = 1
 
 " Only lint on save to reduce interruptions
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_save = 1
 
 
