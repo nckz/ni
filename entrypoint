@@ -1,26 +1,24 @@
 #!/bin/bash
 
-# From vim term `:h rtp`
-# Unix:  "$HOME/.vim,
-# $VIM/vimfiles,
-# $VIMRUNTIME,
-# $VIM/vimfiles/after,
-# $HOME/.vim/after"
-#
-# its important to recognize that if no users are made, vim looks in the root
-# directory for .vimrc and .vim
-# HOME = /
+# Neovim looks in $XDG_CONFIG_HOME/nvim (defaults to ~/.config/nvim). The
+# Dockerfile installs the config at /.config/nvim so both an unprivileged
+# user (HOME=/) and root (HOME=/root, symlinked) pick it up.
+
+# When `ni` runs the container with --user $(id -u):$(id -g), the mapped
+# user has no entry in /etc/passwd; HOME stays as / which the user can't
+# write to, so nvim spams E739/E886 trying to create ShaDa state files.
+# Point the XDG state/data/cache dirs at /tmp (world-writable) so nvim has
+# somewhere to scribble. The config dir is fine where it is.
+export XDG_DATA_HOME=/tmp/.local/share
+export XDG_STATE_HOME=/tmp/.local/state
+export XDG_CACHE_HOME=/tmp/.cache
+mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
 
 # volume mounted working directory
 VIMWD=/vimwd
-CONF_DIR=/
 
-# move to the vim working directory
+# move to the working directory
 cd ${VIMWD}
 
-# start vim with all args passed to docker
-# set the system vimrc
-# -N and -u args are used b/c the 'user' might be an unpriviledged user (with
-# home '/') or sudo/root (with home '/root').
-# vim -N -u ${CONF_DIR}/.vimrc $@
-vim $@
+# start neovim with all args passed to docker
+nvim $@

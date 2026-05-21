@@ -3,14 +3,14 @@
   </p>
 
 <p align="center">
-    <i>My cursed vim setup wrapped in a docker image.</i>
+    <i>My cursed neovim setup wrapped in a docker image.</i>
 </p>
 
 
 # ni
-`ni` is yet another prepackaged vim setup. The difference between this one an
-others is that it uses a configuration of vim that is too much a part of my
-muscle memory for me to leave behind.
+`ni` is yet another prepackaged neovim setup. The difference between this one
+and others is that it uses a configuration that is too much a part of my muscle
+memory for me to leave behind.
 
 ## What It Does
 This package contains a launcher script that makes it easy to use this vim
@@ -35,29 +35,27 @@ under a git repository and then set the docker mount.  This allows for git
 based vim functions such as git-grep.
 
 ## Packages
-This version of vim uses the following packages:
+This version of neovim uses the following packages:
 
-* [Ale](https://github.com/dense-analysis/ale/blob/master/README.md)
-    * python
-        * black formatting on save
-        * flake8 linter
-    * bash
-        * shellcheck
-    * remove_trailing_lines
-* [CtrlP](https://github.com/kien/ctrlp.vim)
+* [nvim-lint](https://github.com/mfussenegger/nvim-lint) — diagnostics
+    * python: `flake8` (ignores `E203,E501,W503`)
+    * bash: `shellcheck`
+* [conform.nvim](https://github.com/stevearc/conform.nvim) — format on save
+    * python: `black`
+    * `*`: `trim_newlines` (replaces ALE `remove_trailing_lines`)
+* [Telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) (with `plenary.nvim`, `ripgrep`, `fd`)
 * [Solarized](https://ethanschoonover.com/solarized/)
-* `ghmarkdown` syntax highlighting
 
 ## Mappings of Note
 The following mappings are the most interesting:
 
-* Ale Toggle - `,at`
-* CtrlP - `,p`
-    * CtrlPClearCache - `,cc`
+* Lint toggle - `,at`
+* File finder (Telescope find_files) - `,p`
 * GitGrep when cursor is on the word
     * `*` highlight search in the same document
     * `^` highlight search in multiple documents (in the same git repo)
     * `&` highlight search using the system `grep` command
+    * `:GA <pattern>` git-grep across the entire repo
 * paste toggle - F2
 * spell - F6
     * nospell - F7

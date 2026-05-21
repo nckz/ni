@@ -1,14 +1,12 @@
 #!/bin/bash
 # Author: Nick Zwart
-# Date: 2022jan25
-# Brief: a script that can copy the vim and vimrc directories to HOME and
-#        modify the background to either dark or light.
-#        Also append an alias for ni -> vim.
-#        Also add my gitconfig.
-#        Also install Ale
+# Date: 2022jan25 (updated for neovim 2026)
+# Brief: install the neovim config (init.vim + custom plugins from vim/)
+#        into ~/.config/nvim, fetch the modern plugin stack (Telescope,
+#        nvim-lint, conform.nvim), drop in the gitconfig, and link
+#        /usr/bin/ni -> nvim.
 
 ######################################################################## STRICT
-# strict mode settings
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -18,16 +16,32 @@ BKGND_COLOR=${1:-dark}
 
 
 ########################################################################## MAIN
-# copy the cursed vim config
-cp -rv vim "$HOME/.vim"
+CONF_DIR="$HOME/.config/nvim"
+mkdir -p "$CONF_DIR"
+
+# Custom plugin/runtime bits live under vim/ in this repo; copy them into
+# the nvim config tree (colors, plugin, autoload, ftplugin, snippets).
+for sub in colors plugin autoload ftplugin snippets; do
+    if [ -d "vim/$sub" ]; then
+        cp -rv "vim/$sub" "$CONF_DIR/$sub"
+    fi
+done
+
 cp -v gitconfig "$HOME/.gitconfig"
 
-# modify based on first arg
-sed "s/^set\ background.*/set\ background=${BKGND_COLOR}/g" < vimrc > "$HOME/.vimrc"
+# write init.vim with the background swapped per first arg
+sed "s/^set\ background.*/set\ background=${BKGND_COLOR}/g" < init.vim > "$CONF_DIR/init.vim"
 
-# install ale
-mkdir -p "$HOME/.vim/pack/git-plugins/start"
-git clone --depth 1 https://github.com/dense-analysis/ale.git "$HOME/.vim/pack/git-plugins/start/ale"
+# install plugins via neovim's native pack mechanism
+mkdir -p "$CONF_DIR/pack/git-plugins/start"
+git clone --depth 1 https://github.com/nvim-telescope/telescope.nvim.git \
+    "$CONF_DIR/pack/git-plugins/start/telescope.nvim"
+git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git \
+    "$CONF_DIR/pack/git-plugins/start/plenary.nvim"
+git clone --depth 1 https://github.com/mfussenegger/nvim-lint.git \
+    "$CONF_DIR/pack/git-plugins/start/nvim-lint"
+git clone --depth 1 https://github.com/stevearc/conform.nvim.git \
+    "$CONF_DIR/pack/git-plugins/start/conform.nvim"
 
-# make a ni executable link to vim
-ln -s "$(command -v vim)" /usr/bin/ni
+# make a ni executable link to nvim
+ln -s "$(command -v nvim)" /usr/bin/ni
