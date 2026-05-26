@@ -87,6 +87,20 @@ if ok_c then
     format_on_save = { timeout_ms = 2000, lsp_format = 'never' },
   })
 end
+
+-- OSC 52 clipboard: copy/paste over the terminal escape sequence so y/p
+-- round-trip through the host system clipboard even inside Docker over
+-- SSH. No X11/Wayland/xclip required. Works in iTerm2, kitty, Alacritty,
+-- wezterm, recent xterm, and tmux (>=3.3 with allow-passthrough on, or
+-- set-clipboard set to on/external).
+local ok_o, osc52 = pcall(require, 'vim.ui.clipboard.osc52')
+if ok_o then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy  = { ['+'] = osc52.copy('+'),  ['*'] = osc52.copy('*')  },
+    paste = { ['+'] = osc52.paste('+'), ['*'] = osc52.paste('*') },
+  }
+end
 EOF
 
 " http://amix.dk/vim/vimrc.html
@@ -221,7 +235,8 @@ set expandtab           "use spaces rather than tabs
 set autowrite		"write file when switching between files
 set backspace=indent,eol,start	" allows backspace like a normal WYSIWYG
 
-set clipboard=unnamed	"use generic register for yanking
+set clipboard=unnamedplus	"yank to + register so OSC52 targets the system clipboard (not X11 primary)
+set mouse=		"disable mouse capture so drag-select falls back to terminal copy when OSC52 isn't available (e.g. macOS Terminal.app)
 set confirm		"confirm with extra dialog: writing, etc..
 set display=lastline    "include as much of lastline as possible in display instead of using "@"
 set shada='100,<5000	" neovim ShaDa equivalent of viminfo: 100 files, 5000 register lines
