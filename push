@@ -1,10 +1,13 @@
 #!/bin/bash
 # Author: Nick Zwart
 # Date: 2019dec31
-# Brief: push the docker image to dockerhub
+# Brief: push each per-arch image to Docker Hub, then assemble a
+#        multi-arch manifest at :latest pointing at both. After this,
+#        `docker pull 3x3t3r/ni:latest` on either arch returns the
+#        matching native variant.
+#        Requires `docker login` against the DOCKER_ACC account.
 
-# ACC=$1
-# PSWD=$2
+set -eo pipefail
 
 
 ####################################################################### INCLUDE
@@ -13,5 +16,18 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/config.bash ; config
 
 
 ########################################################################## MAIN
-# docker login --username ${ACC} --password ${PSWD}
-docker push ${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}
+ARCHES=(amd64 arm64)
+
+for ARCH in "${ARCHES[@]}"; do
+    echo "==> pushing :${DOCKER_TAG}-${ARCH}"
+    docker push "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-${ARCH}"
+done
+
+echo "==> assembling multi-arch manifest :${DOCKER_TAG}"
+# Recreate from scratch in case a previous manifest with the same name
+# exists locally with stale references.
+docker manifest rm "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}" 2>/dev/null || true
+docker manifest create "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}" \
+    "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-amd64" \
+    "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-arm64"
+docker manifest push "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}"

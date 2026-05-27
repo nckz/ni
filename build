@@ -1,7 +1,15 @@
 #!/bin/bash
 # Author: Nick Zwart
 # Date: 2019dec31
-# Brief: build the docker image for ni.
+# Brief: build the docker image for ni for each target architecture.
+#        Each arch is loaded into the local daemon under an arch-suffixed
+#        tag (e.g. :latest-amd64, :latest-arm64) so both are inspectable
+#        and runnable locally. The native arch is additionally tagged as
+#        :latest so `ni` runs the host-native image with no emulation.
+#        Use ./push to upload the per-arch tags and assemble the
+#        multi-arch manifest on Docker Hub.
+
+set -eo pipefail
 
 
 ####################################################################### INCLUDE
@@ -9,5 +17,39 @@
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/config.bash ; config
 
 
+######################################################################## SETUP
+# The default `docker` buildx driver can't build foreign-arch images;
+# the `docker-container` driver can (via QEMU emulation). Create one if
+# it doesn't exist; reuse it on subsequent runs.
+BUILDER='nibuilder'
+if ! docker buildx inspect "${BUILDER}" >/dev/null 2>&1; then
+    docker buildx create --name "${BUILDER}" --driver docker-container --use
+else
+    docker buildx use "${BUILDER}"
+fi
+
+
 ########################################################################## MAIN
-docker build --rm -t "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}" .
+ARCHES=(amd64 arm64)
+
+for ARCH in "${ARCHES[@]}"; do
+    echo "==> building linux/${ARCH} -> ${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-${ARCH}"
+    docker buildx build \
+        --platform "linux/${ARCH}" \
+        --rm \
+        -t "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-${ARCH}" \
+        --load \
+        .
+done
+
+# Tag the native arch as the unsuffixed :latest so `ni` (which references
+# :latest) runs the host-native image with no emulation.
+case "$(uname -m)" in
+    x86_64)         NATIVE_ARCH=amd64 ;;
+    arm64|aarch64)  NATIVE_ARCH=arm64 ;;
+    *) echo "unknown host arch $(uname -m); skipping :latest alias"; exit 0 ;;
+esac
+docker tag \
+    "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}-${NATIVE_ARCH}" \
+    "${DOCKER_ACC}/${DOCKER_REP}:${DOCKER_TAG}"
+echo "==> tagged :${DOCKER_TAG} -> :${DOCKER_TAG}-${NATIVE_ARCH} (native)"
